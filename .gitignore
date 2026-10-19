@@ -1,0 +1,4 @@
+.git-historico-original/
+**/node_modules/
+starterkit/package.json
+starterkit/package-lock.json
