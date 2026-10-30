@@ -1,4 +1,3 @@
-
 const form = document.getElementById('form');
 const result = document.getElementById('result');
 
@@ -7,22 +6,15 @@ form.addEventListener('submit', handleSubmit);
 function handleSubmit(event) {
   event.preventDefault();
 
-  // Limpa os resultados anteriores
   result.innerHTML = '';
 
-  // Obtém os dados informados pelo usuário
   const gender = getSelectedValue('gender');
   const age = getInputNumberValue('age');
   const weight = getInputNumberValue('weight');
   const height = getInputNumberValue('height');
   const activityLevel = Number(getSelectedValue('activity_level'));
 
-  // Validação dos campos numéricos
-  if (
-    !Number.isInteger(age) ||
-    age < 18 ||
-    age > 100
-  ) {
+  if (!Number.isInteger(age) || age < 18 || age > 100) {
     alert('Informe uma idade válida entre 18 e 100 anos.');
     return;
   }
@@ -37,16 +29,11 @@ function handleSubmit(event) {
     return;
   }
 
-  if (
-    !Number.isInteger(height) ||
-    height < 50 ||
-    height > 250
-  ) {
+  if (!Number.isInteger(height) || height < 50 || height > 250) {
     alert('Informe uma altura válida entre 50 e 250 cm.');
     return;
   }
 
-  // Validação das opções selecionadas
   if (!['male', 'female'].includes(gender)) {
     alert('Selecione uma opção válida para sexo.');
     return;
@@ -59,19 +46,24 @@ function handleSubmit(event) {
     return;
   }
 
-  // Cálculo da Taxa Metabólica Basal (TMB)
   const tmb = Math.round(
     gender === 'female'
-      ? (655 + (9.6 * weight) + (1.8 * height) - (4.7 * age))
-      : (66 + (13.7 * weight) + (5 * height) - (6.8 * age))
+      ? 655 + 9.6 * weight + 1.8 * height - 4.7 * age
+      : 66 + 13.7 * weight + 5 * height - 6.8 * age
   );
 
-  // Cálculo das estimativas calóricas
   const maintenance = Math.round(tmb * activityLevel);
   const loseWeight = maintenance - 450;
   const gainWeight = maintenance + 450;
 
-  // Exibição dos resultados
+  const resultados = [tmb, maintenance, loseWeight, gainWeight];
+
+  if (!resultados.every(valor => Number.isFinite(valor) && valor > 0)) {
+    result.textContent =
+      'Não foi possível calcular uma estimativa válida com esses dados. Confira as informações preenchidas.';
+    return;
+  }
+
   const layout = `
     <h2>Aqui está o resultado:</h2>
 
